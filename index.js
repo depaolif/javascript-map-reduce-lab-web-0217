@@ -9000,3 +9000,45 @@ const issues = [
     "url": "https://api.github.com/repos/learn-co-curriculum/js-donut-lab/issues/2"
   }
 ];
+
+var issuesWithUpdatedApiUrl = issues.map(function(issue) {
+  let new_issue = (JSON.parse(JSON.stringify(issue)));
+  if (issue.url.includes("api.github.com")) {
+    new_issue.url = issue.url.replace(/api.github.com/, 'api-v2.github.com')
+    return new_issue
+  } else {
+    return new_issue
+  }
+})
+
+var commentCountAcrossIssues = issues.map(function(issue) {
+  return issue.comments_count
+}).reduce((a,b) => {return a+b})
+
+var openIssues = issues.filter(function(issue) {
+  return issue.state === 'open'
+})
+
+var nonAutomaticIssues = issues.filter(function(issue) {
+  return !issue.body.includes("This pull request has been automatically created by learn.co.")
+})
+
+// this code works, but is not passing the test...
+// results = nonAutomaticIssues.map(function(issue) {
+//   return `<tr>
+//   <td>${issue.body}</td>
+//   <td>${issue.created_at}</td>
+//   <td>${issue.state}</td>
+//   </tr>`
+// })
+// document.getElementById("results").innerHTML = results.join('')
+
+const $tbody = document.getElementById('results');
+$tbody.innerHTML = nonAutomaticIssues
+  .map(issue => `<tr>
+    <td>${issue.body}</td>
+    <td>${issue.created_at}</td>
+    <td>${issue.state}</td>
+    </tr>`
+  )
+  .join('');
